@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Portofolio Keluarga Cemara</title>
 
-  <!-- Memuat file CSS eksternal -->
+  <!-- File CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
 
-  <!-- Menggunakan library PapaParse untuk membaca file CSV dari Google Sheets -->
+  <!-- Library PapaParse -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-  <!-- Memuat file JS eksternal dengan atribut defer (agar dijalankan setelah HTML selesai dimuat) -->
+  <!-- File JavaScript utama -->
   <script defer src="assets/js/script.js"></script>
 </head>
 
@@ -28,13 +28,16 @@
   ========================== -->
   <section class="judul-bagian" aria-label="Bagian Portofolio">
     <h2>♥ Portofolio</h2>
-    <button onclick="loadData()" aria-label="Muat ulang data portofolio">Refresh</button>
+    <div>
+      <button onclick="loadData()" aria-label="Muat ulang data portofolio">Refresh</button>
+      <button onclick="redirectToSheet()" aria-label="Buka Google Sheets">Redirect</button>
+    </div>
   </section>
 
   <div class="data-tabel-portofolio">
     <table id="tabel-portfolio">
-      <thead></thead> <!-- Baris header tabel -->
-      <tbody></tbody> <!-- Baris data portofolio -->
+      <thead></thead>
+      <tbody></tbody>
     </table>
   </div>
 
@@ -47,10 +50,9 @@
 
   <div class="data-tabel">
     <table id="tabel-rekapitulasi">
-      <thead></thead> <!-- Header tabel rekap -->
-      <tbody></tbody> <!-- Data rekap -->
+      <thead></thead>
+      <tbody></tbody>
     </table>
   </div>
-
 </body>
 </html>
