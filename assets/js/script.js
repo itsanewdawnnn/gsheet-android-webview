@@ -1,9 +1,9 @@
 // ----------------------------------------
 // KONFIGURASI: ID dan GID dari Google Sheet
 // ----------------------------------------
-const sheetID = '1JZ4OV-qpB_QhyXJMeNR9YRAL5GDuKYdAm62ch7ShteM'; // ID dokumen Google Sheet
-const gid = '371636866'; // GID (tab tertentu dalam Google Sheets)
-const url = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=${gid}`; // URL CSV
+const sheetID = '1JZ4OV-qpB_QhyXJMeNR9YRAL5GDuKYdAm62ch7ShteM';
+const gid = '371636866';
+const url = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=${gid}`;
 
 // ----------------------------------------
 // FUNGSI: Menampilkan animasi loader
@@ -23,47 +23,37 @@ function hideLoader() {
 // FUNGSI UTAMA: Ambil data dan tampilkan di tabel
 // ----------------------------------------
 function loadData() {
-  showLoader(); // Tampilkan loader saat mulai proses
+  showLoader();
 
-  // Ambil elemen-elemen target (thead & tbody) dari DOM
   const portfolioThead = document.querySelector('#tabel-portfolio thead');
   const portfolioTbody = document.querySelector('#tabel-portfolio tbody');
   const rekapitulasiThead = document.querySelector('#tabel-rekapitulasi thead');
   const rekapitulasiTbody = document.querySelector('#tabel-rekapitulasi tbody');
 
-  // Kosongkan isi tabel sebelumnya (reset data)
   portfolioThead.innerHTML = '';
   portfolioTbody.innerHTML = '';
   rekapitulasiThead.innerHTML = '';
   rekapitulasiTbody.innerHTML = '';
 
-  // Ambil file CSV dari Google Sheets
   fetch(url)
-    .then(response => response.text()) // Ubah menjadi teks
+    .then(response => response.text())
     .then(csvText => {
-      // Parse CSV dengan PapaParse
       Papa.parse(csvText, {
         complete: function(results) {
           const data = results.data;
 
-          // ----------------------------------------
-          // HEADER: Tabel Portofolio (kolom 0 s.d. 7)
-          // ----------------------------------------
+          // HEADER: Portofolio (kolom 0–7)
           const headRow = document.createElement('tr');
           for (let j = 0; j <= 7; j++) {
             const th = document.createElement('th');
-            th.textContent = data[0][j] ?? ''; // Gunakan baris pertama sebagai header
+            th.textContent = data[0][j] ?? '';
             headRow.appendChild(th);
           }
           portfolioThead.appendChild(headRow);
 
-          // ----------------------------------------
-          // DATA: Tabel Portofolio (baris 1 s.d. akhir)
-          // ----------------------------------------
+          // DATA: Portofolio
           for (let i = 1; i < data.length; i++) {
             const row = data[i];
-
-            // Lewati baris kosong (jika semua kolom 0-7 kosong)
             const isEmpty = row.slice(0, 8).every(cell => !cell || cell.trim() === '');
             if (isEmpty) continue;
 
@@ -76,9 +66,7 @@ function loadData() {
             portfolioTbody.appendChild(tr);
           }
 
-          // ----------------------------------------
-          // HEADER: Tabel Rekapitulasi (kolom 9-10)
-          // ----------------------------------------
+          // HEADER: Rekapitulasi (kolom 9–10)
           const rekapHeader = document.createElement('tr');
           for (let j = 9; j <= 10; j++) {
             const th = document.createElement('th');
@@ -87,9 +75,7 @@ function loadData() {
           }
           rekapitulasiThead.appendChild(rekapHeader);
 
-          // ----------------------------------------
-          // DATA: Tabel Rekapitulasi (baris 1-8)
-          // ----------------------------------------
+          // DATA: Rekapitulasi (baris 1–8)
           for (let i = 1; i <= 8; i++) {
             const tr = document.createElement('tr');
             for (let j = 9; j <= 10; j++) {
@@ -100,18 +86,26 @@ function loadData() {
             rekapitulasiTbody.appendChild(tr);
           }
 
-          hideLoader(); // Sembunyikan loader setelah selesai
+          hideLoader();
         }
       });
     })
     .catch(err => {
-      hideLoader(); // Tetap sembunyikan loader meskipun gagal
+      hideLoader();
       alert("Gagal mengambil data dari Google Sheets.");
       console.error("Detail error:", err);
     });
 }
 
 // ----------------------------------------
-// JALANKAN SAAT HALAMAN DIMUAT
+// INISIALISASI
 // ----------------------------------------
 window.onload = loadData;
+
+// Pastikan fungsi redirect bisa dipanggil dari HTML
+window.redirectToSheet = function() {
+  window.open(
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRWphCAKFdMWQcSqCxndaeQoZXEa76a_Qz2Eg5rGQaNqlJ_r_UGLCDBiAdqAgbwzwkKkWvLn_QvNDc4/pubhtml',
+    '_blank'
+  );
+};
