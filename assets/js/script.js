@@ -1,12 +1,10 @@
 (function() {
   const allowedOrigin = 'https://itsanewdawnnn.github.io';
-  const allowedPath = '/smart-money-tracking/';
-  const currentOrigin = window.location.origin;
-  const currentPath = window.location.pathname;
 
-  if (currentOrigin !== allowedOrigin || !currentPath.startsWith(allowedPath)) {
+  if (window.location.origin !== allowedOrigin) {
     document.documentElement.innerHTML = '';
     document.title = '';
+    throw new Error('Akses ditolak.');
   }
 })();
 
@@ -99,4 +97,3 @@ window.redirectToSheet = function() {
     '_blank'
   );
 };
-
